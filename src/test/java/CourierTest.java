@@ -12,17 +12,12 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class CourierTest {
-    private static final String URL = "https://qa-scooter.praktikum-services.ru";
     private static final String Login = "VikaWR";
     private static final String Password = "56123";
     private static final String FirstName = "Test";
     private int courierId;
     private final Gson gson = new Gson();
 
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = URL;
-    }
 
     @After
     @Step("Находит id созданного курьера и удаляет его из БД")

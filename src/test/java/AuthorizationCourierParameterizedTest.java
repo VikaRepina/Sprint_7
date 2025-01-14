@@ -16,7 +16,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 @RunWith(Parameterized.class)
 public class AuthorizationCourierParameterizedTest {
-    private static final String URL = "https://qa-scooter.praktikum-services.ru";
     private String loginA;
     private String passwordA;
     private static final Gson gson = new Gson();
@@ -26,10 +25,6 @@ public class AuthorizationCourierParameterizedTest {
         this.passwordA = passwordA;
     }
 
-    @Before
-    public void setup() {
-        RestAssured.baseURI = URL;
-    }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -46,7 +41,7 @@ public class AuthorizationCourierParameterizedTest {
     public void testCourierWithMissingField() {
         CourierApi courierApi = new CourierApi();
         CourierLoginRequest request = new CourierLoginRequest(loginA, passwordA);
-        Response response = courierApi.AuthorizationCourier(request);
+        Response response = courierApi.authorizationCourier(request);
         response.then().statusCode(400);
         response.then().body("message", equalTo("Недостаточно данных для входа"));
     }

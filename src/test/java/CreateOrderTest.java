@@ -18,7 +18,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 @RunWith(Parameterized.class)
 public class CreateOrderTest {
-    private static final String URL = "https://qa-scooter.praktikum-services.ru";
     private final Gson gson = new Gson();
     private int orderTrack;
 
@@ -44,10 +43,6 @@ public class CreateOrderTest {
         this.color = color;
     }
 
-    @Before
-    public void setup() {
-        RestAssured.baseURI = URL;
-    }
 
     @After
     @Step("Удаляет созданный заказ")
@@ -75,7 +70,7 @@ public class CreateOrderTest {
     public void testCreateOrderWithColorSelection() {
         OrderApi orderApi = new OrderApi();
         Order order = new Order(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment, color);
-        Response response = orderApi.CreateOrder(order);
+        Response response = orderApi.createOrder(order);
         response.then().statusCode(201);
         response.then().body("track", notNullValue());
         orderTrack = response.jsonPath().get("track");

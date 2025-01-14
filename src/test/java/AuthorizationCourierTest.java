@@ -13,7 +13,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class AuthorizationCourierTest {
-    private static final String URL = "https://qa-scooter.praktikum-services.ru";
     private static final String LoginA = "VikaWRQS";
     private static final String PasswordA = "52763";
     private static final String FirstNameA = "Test";
@@ -24,7 +23,6 @@ public class AuthorizationCourierTest {
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = URL;
         CourierApi courierApi = new CourierApi();
         Courier courier = new Courier(LoginA, PasswordA, FirstNameA);
         Response response = courierApi.createCourier(courier);
@@ -50,7 +48,7 @@ public class AuthorizationCourierTest {
     public void testSuccessfulAuthorizationCourier() {
         CourierApi courierApi = new CourierApi();
         CourierLoginRequest request = new CourierLoginRequest(LoginA, PasswordA);
-        Response response = courierApi.AuthorizationCourier(request);
+        Response response = courierApi.authorizationCourier(request);
         response.then().statusCode(200);
         response.then().body("id", notNullValue());
     }
@@ -61,7 +59,7 @@ public class AuthorizationCourierTest {
     public void testAuthorizationNonexistentCourier() {
         CourierApi courierApi = new CourierApi();
         CourierLoginRequest request = new CourierLoginRequest(LoginN, PasswordN);
-        Response response = courierApi.AuthorizationCourier(request);
+        Response response = courierApi.authorizationCourier(request);
         response.then().statusCode(404);
         response.then().body("message", equalTo("Учетная запись не найдена"));
     }
@@ -72,7 +70,7 @@ public class AuthorizationCourierTest {
     public void testInvalidLogin() {
         CourierApi courierApi = new CourierApi();
         CourierLoginRequest request = new CourierLoginRequest(LoginN, PasswordA);
-        Response response = courierApi.AuthorizationCourier(request);
+        Response response = courierApi.authorizationCourier(request);
         response.then().statusCode(404);
         response.then().body("message", equalTo("Учетная запись не найдена"));
     }
@@ -83,7 +81,7 @@ public class AuthorizationCourierTest {
     public void testInvalidPassword() {
         CourierApi courierApi = new CourierApi();
         CourierLoginRequest request = new CourierLoginRequest(LoginA, PasswordN);
-        Response response = courierApi.AuthorizationCourier(request);
+        Response response = courierApi.authorizationCourier(request);
         response.then().statusCode(404);
         response.then().body("message", equalTo("Учетная запись не найдена"));
     }

@@ -16,7 +16,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 @RunWith(Parameterized.class)
 public class CourierParameterizedTest {
-    private static final String URL = "https://qa-scooter.praktikum-services.ru";
     private Integer courierId;
     private final Gson gson = new Gson();
 
@@ -28,11 +27,6 @@ public class CourierParameterizedTest {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
-    }
-
-    @Before
-    public void setup() {
-        RestAssured.baseURI = URL;
     }
 
 

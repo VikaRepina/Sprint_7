@@ -10,20 +10,15 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 
 public class OrderListTest {
-    private static final String URL = "https://qa-scooter.praktikum-services.ru";
     private final Gson gson = new Gson();
 
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = URL;
-    }
 
     @Test
     @DisplayName("Test receive order list")
     @Description("Проверка что в тело ответа возвращается список заказов")
     public void testReceiveOrderList() {
         OrderApi orderApi = new OrderApi();
-        Response response = orderApi.ReceiveOrderList();
+        Response response = orderApi.receiveOrderList();
         response.then().statusCode(200);
         response.then().body("orders", notNullValue());
         response.then().body("orders.id", notNullValue());

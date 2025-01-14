@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -11,14 +12,16 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-@RunWith(Parameterized.class)
-public class AuthorizationCourierSecondTest {
-    private static final String URL = "https://qa-scooter.praktikum-services.ru";
+import static org.hamcrest.CoreMatchers.equalTo;
 
+@RunWith(Parameterized.class)
+public class AuthorizationCourierParameterizedTest {
+    private static final String URL = "https://qa-scooter.praktikum-services.ru";
     private String loginA;
     private String passwordA;
+    private static final Gson gson = new Gson();
 
-    public AuthorizationCourierSecondTest(String loginA,String passwordA) {
+    public AuthorizationCourierParameterizedTest(String loginA, String passwordA) {
         this.loginA = loginA;
         this.passwordA = passwordA;
     }
@@ -34,9 +37,6 @@ public class AuthorizationCourierSecondTest {
                 {"", ""},
                 {"VikaWRQ", ""},
                 {"", "52413"},
-                {null, null},
-                {"VikaWRQ", null},
-                {null, "52413"},
         });
     }
 
@@ -44,14 +44,10 @@ public class AuthorizationCourierSecondTest {
     @DisplayName("Test courier with missing field")
     @Description("Проверка на вывод ошибки, при пустом поле или его отсутствие в процессе авторизации")
     public void testCourierWithMissingField() {
-        String requestBody = String.format("{\"login\": \"%s\", \"password\": \"%s\"}",
-                loginA != null ? loginA : "",
-                passwordA != null ? passwordA : "");
-        Response response = RestAssured
-                .given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .post("/api/v1/courier/login");
+        CourierApi courierApi = new CourierApi();
+        CourierLoginRequest request = new CourierLoginRequest(loginA, passwordA);
+        Response response = courierApi.AuthorizationCourier(request);
         response.then().statusCode(400);
+        response.then().body("message", equalTo("Недостаточно данных для входа"));
     }
 }
